@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -12,6 +13,12 @@ class ProductController extends Controller
      */
     public function index()
     {
+
+        //PENGECEKANA JIKA USER TIDAK LOGIN DI REDIRECT
+        if (!Auth::check()) {
+            return redirect('login');
+        }
+
         $products = Product::get();
 
         $view_data = [
@@ -26,6 +33,12 @@ class ProductController extends Controller
      */
     public function create()
     {
+
+        //PENGECEKANA JIKA USER TIDAK LOGIN DI REDIRECT
+        if (!Auth::check()) {
+            return redirect('login');
+        }
+
         return view ('products.create');
     }
 
@@ -34,6 +47,12 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+
+        //PENGECEKANA JIKA USER TIDAK LOGIN DI REDIRECT
+        if (!Auth::check()) {
+            return redirect('login');
+        }
+
         $name = $request->input('name');
         $code_products = $request->input('code_products');
         $price = $request->input('price');
@@ -52,6 +71,12 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
+
+        //PENGECEKANA JIKA USER TIDAK LOGIN DI REDIRECT
+        if (!Auth::check()) {
+            return redirect('login');
+        }
+
         $product = Product::where('id', '=', $id)->first();
         $price = Product::where('price')->get();
 
@@ -67,6 +92,12 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
+
+        //PENGECEKANA JIKA USER TIDAK LOGIN DI REDIRECT
+        if (!Auth::check()) {
+            return redirect('login');
+        }
+
         $product = Product::where('id', $id)->first();
 
         $view_data = [
@@ -82,6 +113,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        //PENGECEKANA JIKA USER TIDAK LOGIN DI REDIRECT
+        if (!Auth::check()) {
+            return redirect('login');
+        }
+
         $name = $request->input('name');
         $code_products = $request->input('code_products');
         $price = $request->input('price');
@@ -102,6 +139,12 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
+
+        //PENGECEKANA JIKA USER TIDAK LOGIN DI REDIRECT
+        if (!Auth::check()) {
+            return redirect('login');
+        }
+
         Product::where('id', $id)->delete();
         return redirect('products');
     }
