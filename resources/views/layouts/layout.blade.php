@@ -127,6 +127,10 @@
                         class="flex items-center my-3 px-4 py-2 text-sm font-medium rounded hover:bg-gray-700 {{ request()->is('products') ? 'bg-gray-700' : '' }}">
                         Products
                     </a>
+                    <a href="/suppliers"
+                        class="flex items-center my-3 px-4 py-2 text-sm font-medium rounded hover:bg-gray-700 {{ request()->is('suppliers') ? 'bg-gray-700' : '' }}">
+                        Suppliers
+                    </a>
                 </nav>
 
                 <!-- Footer -->
