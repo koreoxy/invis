@@ -29,86 +29,151 @@
 
 </head>
 
-<body class="antialiased">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-    {{-- Navbar --}}
-    <nav class="bg-gray-800">
-        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div class="relative flex h-16 items-center justify-between">
-                <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                    <button type="button" id="mobile-menu-button"
-                        class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset"
-                        aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="absolute -inset-0.5"></span>
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="block size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" aria-hidden="true" data-slot="icon">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                        </svg>
-                        <svg class="hidden size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" aria-hidden="true" data-slot="icon">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@yield('title')</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Script menu mobile -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const sidebar = document.getElementById('sidebar');
+
+            mobileMenuButton.addEventListener('click', function() {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+        });
+    </script>
+</head>
+
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>@yield('title')</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Script menu mobile -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const closeSidebarButton = document.getElementById('close-sidebar-button');
+            const sidebar = document.getElementById('sidebar');
+
+            // Toggle sidebar visibility
+            mobileMenuButton.addEventListener('click', function() {
+                sidebar.classList.remove('-translate-x-full');
+            });
+
+            // Close sidebar
+            closeSidebarButton.addEventListener('click', function() {
+                sidebar.classList.add('-translate-x-full');
+            });
+        });
+    </script>
+</head>
+
+
+<body class="antialiased bg-gray-100">
+
+    <!-- Wrapper -->
+    <div class="flex h-screen">
+
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="transform -translate-x-full fixed z-20 inset-y-0 left-0 w-64 bg-gray-800 text-white transition duration-300 ease-in-out sm:translate-x-0 sm:relative sm:z-auto">
+            <div class="flex flex-col h-full">
+                <!-- Header -->
+                <div class="flex items-center justify-between h-16 px-4 bg-gray-900">
+                    <span class="text-xl font-semibold">Invis</span>
+                    <!-- Close button for mobile -->
+                    <button id="close-sidebar-button" class="text-white sm:hidden">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
-                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                    <div class="flex shrink-0 items-center">
-                        <img class="h-8 w-auto"
-                            src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
-                            alt="Your Company">
-                    </div>
-                    <div class="hidden sm:ml-6 sm:block">
-                        <div class="flex space-x-4">
-                            <a href="/"
-                                class="{{ request()->is('/') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium">Dashboard</a>
-                            <a href="/products"
-                                class="{{ request()->is('products') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium">Products</a>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 text-white">
-                    <div class="text-end">
-                        @if (Auth::check())
-                            <a href="{{ url('logout') }}" class="btn btn-warning">Logout</a>
-                        @else
-                            <a href="{{ url('login') }}" class="btn btn-outline-light me-2">Login</a>
-                            <a href="{{ url('register') }}" class="btn btn-outline-light">Register</a>
-                        @endif
-                    </div>
+
+                <!-- Menu -->
+                <nav class="flex-1 px-2 py-4">
+                    <a href="/"
+                        class="flex items-center my-3 px-4 py-2 text-sm font-medium rounded hover:bg-gray-700 {{ request()->is('/') ? 'bg-gray-700' : '' }}">
+                        Dashboard
+                    </a>
+                    <a href="/products"
+                        class="flex items-center my-3 px-4 py-2 text-sm font-medium rounded hover:bg-gray-700 {{ request()->is('products') ? 'bg-gray-700' : '' }}">
+                        Products
+                    </a>
+                </nav>
+
+                <!-- Footer -->
+                <div class="px-4 py-4">
+                    @if (Auth::check())
+                        <a href="{{ url('logout') }}"
+                            class="block w-full px-4 py-2 text-center text-sm font-medium text-white bg-red-500 rounded hover:bg-red-600">
+                            Logout
+                        </a>
+                    @else
+                        <a href="{{ url('login') }}"
+                            class="block w-full px-4 py-2 mb-2 text-center text-sm font-medium text-gray-900 bg-white rounded hover:bg-gray-200">
+                            Login
+                        </a>
+                        <a href="{{ url('register') }}"
+                            class="block w-full px-4 py-2 text-center text-sm font-medium text-white bg-indigo-500 rounded hover:bg-indigo-600">
+                            Register
+                        </a>
+                    @endif
                 </div>
             </div>
-        </div>
+        </aside>
 
-        <!-- Menu mobile -->
-        <div class="sm:hidden hidden" id="mobile-menu">
-            <div class="space-y-1 px-2 pt-2 pb-3">
-                <a href="/"
-                    class="{{ request()->is('/') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} block rounded-md px-3 py-2 text-base font-medium">Dashboard</a>
-                <a href="/products"
-                    class="{{ request()->is('products') ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }} block rounded-md px-3 py-2 text-base font-medium">Products</a>
-            </div>
-        </div>
-    </nav>
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
 
+            <!-- Navbar (visible only on mobile) -->
+            <header class="flex items-center justify-between px-4 py-2 bg-gray-800 sm:hidden">
+                <button id="mobile-menu-button" class="text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+                <span class="text-lg font-semibold text-white">Invis</span>
+            </header>
 
-    {{-- CONTENT --}}
-    <div class="mx-auto max-w-2xl h-screen">
-        <div class="my-20">
-            @yield('content')
+            <!-- Content -->
+            <main class="flex-1 bg-gray-100">
+                <div class="px-4 py-6">
+                    @yield('content')
+                </div>
+            </main>
         </div>
     </div>
-
-
-
-    {{-- FOOTER --}}
-    <footer class="bg-gray-800 pt-8 pb-6">
-        <div class="container mx-auto px-4 text-center text-white">
-            <h1 class="font-bold">Invis</h1>
-        </div>
-    </footer>
-
 </body>
+
 
 </html>
