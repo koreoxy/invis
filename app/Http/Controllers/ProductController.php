@@ -18,7 +18,7 @@ class ProductController extends Controller
             'products' => $products,
         ];
 
-        return view('dashboard.index', $view_data);
+        return view('products.index', $view_data);
     }
 
     /**
@@ -26,7 +26,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view ('products.create');
     }
 
     /**
@@ -34,7 +34,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $name = $request->input('name');
+        $code_products = $request->input('code_products');
+        $price = $request->input('price');
+
+        Product::create([
+            'name' => $name,
+            'code_products' => $code_products,
+            'price' => $price,
+        ]);
+
+        return redirect('products');
     }
 
     /**
@@ -42,7 +52,14 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::where('id', '=', $id)->first();
+        $price = Product::where('price')->get();
+
+        $view_data = [
+            'product' => $product,
+            'price' => $price,
+        ];
+        return view('products.show', $view_data);
     }
 
     /**
@@ -50,15 +67,34 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::where('id', $id)->first();
+
+        $view_data = [
+            'product' => $product,
+        ];
+
+        return view('products.edit', $view_data);
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $name = $request->input('name');
+        $code_products = $request->input('code_products');
+        $price = $request->input('price');
+
+        Product::where('id', $id)
+            ->update([
+                'name' => $name,
+                'code_products' => $code_products,
+                'price' => $price,
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+
+        return redirect("products/{$id}");
     }
 
     /**
@@ -66,6 +102,7 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Product::where('id', $id)->delete();
+        return redirect('products');
     }
 }
