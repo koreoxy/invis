@@ -9,10 +9,16 @@ class Product extends Model
 {
     use HasFactory;
 
-    public $fillable = [
-        'name',
-        'code_products',
-        'price'
+   protected $fillable = [
+        'product_name',
+        'product_desc',
+        'price',
+        'supplier_id',
     ];
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
 
 }

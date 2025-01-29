@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,13 +20,9 @@ class ProductController extends Controller
             return redirect('login');
         }
 
-        $products = Product::get();
+       $products = Product::with('supplier')->get();
 
-        $view_data = [
-            'products' => $products,
-        ];
-
-        return view('products.index', $view_data);
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -39,7 +36,8 @@ class ProductController extends Controller
             return redirect('login');
         }
 
-        return view ('products.create');
+        $suppliers = Supplier::all();
+        return view('products.create', compact('suppliers'));
     }
 
     /**
@@ -53,17 +51,36 @@ class ProductController extends Controller
             return redirect('login');
         }
 
-        $name = $request->input('name');
-        $code_products = $request->input('code_products');
-        $price = $request->input('price');
+        // $name = $request->input('name');
+        // $code_products = $request->input('code_products');
+        // $price = $request->input('price');
 
-        Product::create([
-            'name' => $name,
-            'code_products' => $code_products,
-            'price' => $price,
+        // Product::create([
+        //     'name' => $name,
+        //     'code_products' => $code_products,
+        //     'price' => $price,
+        // ]);
+
+        // return redirect('products');
+
+        // Validasi input
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'supplier_id' => 'required|exists:suppliers,id',
         ]);
 
-        return redirect('products');
+        // Simpan ke database
+        Product::create([
+            'product_name' => $request->input('name'),
+            'product_desc' => $request->input('description'),
+            'price' => $request->input('price'),
+            'supplier_id' => $request->input('supplier_id'),
+        ]);
+
+        // Redirect dengan pesan sukses
+        return redirect('products')->with('success', 'Produk berhasil ditambahkan!');
     }
 
     /**
@@ -77,14 +94,8 @@ class ProductController extends Controller
             return redirect('login');
         }
 
-        $product = Product::where('id', '=', $id)->first();
-        $price = Product::where('price')->get();
-
-        $view_data = [
-            'product' => $product,
-            'price' => $price,
-        ];
-        return view('products.show', $view_data);
+        $product = Product::with('supplier')->findOrFail($id);
+        return view('products.show', compact('product'));
     }
 
     /**
@@ -98,13 +109,10 @@ class ProductController extends Controller
             return redirect('login');
         }
 
-        $product = Product::where('id', $id)->first();
+        $product = Product::findOrFail($id);
+        $suppliers = Supplier::all(); // Ambil semua pemasok
 
-        $view_data = [
-            'product' => $product,
-        ];
-
-        return view('products.edit', $view_data);
+        return view('products.edit', compact('product', 'suppliers'));
     }
 
 
@@ -119,19 +127,27 @@ class ProductController extends Controller
             return redirect('login');
         }
 
-        $name = $request->input('name');
-        $code_products = $request->input('code_products');
-        $price = $request->input('price');
+         // Validasi input
+        $validated = $request->validate([
+            'product_name' => 'required|string|max:100',
+            'product_desc' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'supplier_id' => 'required|exists:suppliers,id',
+        ]);
 
-        Product::where('id', $id)
-            ->update([
-                'name' => $name,
-                'code_products' => $code_products,
-                'price' => $price,
-                'updated_at' => date('Y-m-d H:i:s'),
-            ]);
+        // Cari produk berdasarkan ID
+        $product = Product::findOrFail($id);
 
-        return redirect("products/{$id}");
+        // Update data produk
+        $product->update([
+            'product_name' => $validated['product_name'],
+            'product_desc' => $validated['product_desc'],
+            'price' => $validated['price'],
+            'supplier_id' => $validated['supplier_id'],
+            'updated_at' => now(),
+        ]);
+
+        return redirect("products/{$id}")->with('success', 'Produk berhasil diperbarui.');
     }
 
     /**
