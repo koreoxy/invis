@@ -78,6 +78,18 @@
             </div>
 
             <div class="w-full my-3">
+                <label class="block text-gray-700 text-xs font-bold mb-2" for="categorie_id">Kategori</label>
+                <select
+                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4"
+                    id="categorie_id" name="categorie_id" required>
+                    <option value="">Pilih Kategori</option>
+                    @foreach ($categories as $categorie)
+                        <option value="{{ $categorie->id }}">{{ $categorie->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="w-full my-3">
                 <label class="block text-gray-700 text-xs font-bold mb-2" for="supplier_id">Nama Pemasok</label>
                 <select
                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4"

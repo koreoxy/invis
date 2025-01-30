@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class ProductController extends Controller
             return redirect('login');
         }
 
-       $products = Product::with('supplier')->get();
+        $products = Product::with(['supplier', 'categorie'])->get();
 
         return view('products.index', compact('products'));
     }
@@ -37,7 +38,9 @@ class ProductController extends Controller
         }
 
         $suppliers = Supplier::all();
-        return view('products.create', compact('suppliers'));
+        $categories = Category::all();
+
+        return view('products.create', compact('suppliers', 'categories'));
     }
 
     /**
@@ -51,23 +54,12 @@ class ProductController extends Controller
             return redirect('login');
         }
 
-        // $name = $request->input('name');
-        // $code_products = $request->input('code_products');
-        // $price = $request->input('price');
-
-        // Product::create([
-        //     'name' => $name,
-        //     'code_products' => $code_products,
-        //     'price' => $price,
-        // ]);
-
-        // return redirect('products');
-
         // Validasi input
         $request->validate([
             'name' => 'required|string|max:100',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'categorie_id' => 'required|exists:categories,id',
             'supplier_id' => 'required|exists:suppliers,id',
         ]);
 
@@ -76,6 +68,7 @@ class ProductController extends Controller
             'product_name' => $request->input('name'),
             'product_desc' => $request->input('description'),
             'price' => $request->input('price'),
+            'categorie_id' => $request->input('categorie_id'),
             'supplier_id' => $request->input('supplier_id'),
         ]);
 
@@ -94,7 +87,7 @@ class ProductController extends Controller
             return redirect('login');
         }
 
-        $product = Product::with('supplier')->findOrFail($id);
+        $product = Product::with(['supplier', 'categorie'])->findOrFail($id);
         return view('products.show', compact('product'));
     }
 
@@ -110,9 +103,10 @@ class ProductController extends Controller
         }
 
         $product = Product::findOrFail($id);
-        $suppliers = Supplier::all(); // Ambil semua pemasok
+        $suppliers = Supplier::all();
+        $categories = Category::all();
 
-        return view('products.edit', compact('product', 'suppliers'));
+        return view('products.edit', compact('product', 'suppliers', 'categories'));
     }
 
 
@@ -132,6 +126,7 @@ class ProductController extends Controller
             'product_name' => 'required|string|max:100',
             'product_desc' => 'required|string',
             'price' => 'required|numeric|min:0',
+            'categorie_id' => 'required|exists:categories,id',
             'supplier_id' => 'required|exists:suppliers,id',
         ]);
 
@@ -143,6 +138,7 @@ class ProductController extends Controller
             'product_name' => $validated['product_name'],
             'product_desc' => $validated['product_desc'],
             'price' => $validated['price'],
+            'categorie_id' => $validated['categorie_id'],
             'supplier_id' => $validated['supplier_id'],
             'updated_at' => now(),
         ]);

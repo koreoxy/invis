@@ -5,7 +5,7 @@
 @section('content')
     <div class="mx-auto max-w-lg">
         <h1 class="font-bold mb-2">Edit Product</h1>
-        <form class="w-full max-w-lg" method="POST" action="{{ url("products/$product->id") }}">
+        <form class="w-full max-w-lg" method="POST" action="{{ url(path: "products/$product->id") }}">
             @method('PATCH')
             @csrf
 
@@ -29,6 +29,19 @@
                     class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4"
                     type="number" step="0.01" id="price" name="price" value="{{ old('price', $product->price) }}"
                     required>
+            </div>
+
+            <div class="w-full my-3">
+                <label class="block text-gray-700 text-xs font-bold mb-2" for="categorie_id">Kategori</label>
+                <select
+                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4"
+                    id="categorie_id" name="categorie_id" required>
+                    <option value="">Pilih Kategori</option>
+                    @foreach ($categories as $categorie)
+                        <option value="{{ $categorie->id }}"
+                            {{ $product->categorie_id == $categorie->id ? 'selected' : '' }}>{{ $categorie->name }}</option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="w-full my-3">

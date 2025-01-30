@@ -10,66 +10,6 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-
-    <!-- Script menu mobile -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            mobileMenuButton.addEventListener('click', function() {
-                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
-                mobileMenu.classList.toggle('hidden');
-            });
-        });
-    </script>
-
-
-</head>
-
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>@yield('title')</title>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Script menu mobile -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const sidebar = document.getElementById('sidebar');
-
-            mobileMenuButton.addEventListener('click', function() {
-                sidebar.classList.toggle('-translate-x-full');
-            });
-        });
-    </script>
-</head>
-
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>@yield('title')</title>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -123,9 +63,17 @@
                         class="flex items-center my-3 px-4 py-2 text-sm font-medium rounded hover:bg-gray-700 {{ request()->is('/') ? 'bg-gray-700' : '' }}">
                         Dashboard
                     </a>
+                    <a href="/inventory"
+                        class="flex items-center my-3 px-4 py-2 text-sm font-medium rounded hover:bg-gray-700 {{ request()->is('inventory') ? 'bg-gray-700' : '' }}">
+                        Inventory
+                    </a>
                     <a href="/products"
                         class="flex items-center my-3 px-4 py-2 text-sm font-medium rounded hover:bg-gray-700 {{ request()->is('products') ? 'bg-gray-700' : '' }}">
                         Products
+                    </a>
+                    <a href="/categories"
+                        class="flex items-center my-3 px-4 py-2 text-sm font-medium rounded hover:bg-gray-700 {{ request()->is('categories') ? 'bg-gray-700' : '' }}">
+                        Category
                     </a>
                     <a href="/suppliers"
                         class="flex items-center my-3 px-4 py-2 text-sm font-medium rounded hover:bg-gray-700 {{ request()->is('suppliers') ? 'bg-gray-700' : '' }}">
